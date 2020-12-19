@@ -1,24 +1,24 @@
 #lang racket
 
-(module+ main
-  (require racket/cmdline)
+(require (for-syntax syntax/parse))
 
-  (define who (make-parameter "world"))
-  (command-line
-    #:program "debug-racket"
-    #:once-each
-    [("-n" "--name") name "Who to say hello to" (who name)]
-    #:args ()
-    (printf "hello ~a~n" (who))))
+(struct env (cur-map parent) #:transparent)
+(define (make-env [parent (cur-env)])
+  (env (make-hash) parent))
+(define cur-env (make-parameter (make-env #f)))
 
-(module+ test
-  (require rackunit)
+(define-syntax (debug-define stx)
+  (syntax-parse stx
+    	#:literals (debug-define)
+    [(debug-define name:id exp)
+     #'(define name exp)]
+    [(debug-define (name:id param*:id ...) body)
+     #'(define (name param* ...)
+         (displayln 'debug)
+         body)]
+    [(debug-define . any) #'(define . any)]))
 
-  (define expected 1)
-  (define actual 1)
+(debug-define foo 1)
+(debug-define (id x) x)
 
-  (test-case
-    "Example Test"
-    (check-equal? actual expected ))
-
-  (test-equal? "Shortcut Equal Test" actual expected))
+(id 1)
