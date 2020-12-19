@@ -1,16 +1,17 @@
 #lang racket
 
-(require (for-syntax syntax/parse))
+(require (for-syntax syntax/parse)
+         racket/trace)
 (require "env.rkt")
 
 (define (prompt)
-  (write "> ")
+  (display "> ")
   (define e (read))
   (match e
     ['env (displayln (cur-env))]
     [else (printf "unknown command: `~a`~n" e)]))
 
-(define-syntax (debug-define stx)
+(trace-define-syntax (debug-define stx)
   (syntax-parse stx
     #:literals (debug-define)
     [(debug-define name:id exp)
@@ -23,8 +24,8 @@
            (for ([p-name (list #'param* ...)]
                  [p (list param* ...)])
              (env/bind (syntax-e p-name) p))
+           (~@ (prompt) e*) ...
            (prompt)
-           e* ...
            e))]
     ;; since rest form should be invalid, we rebuild define form to get error
     [(debug-define . any) #'(define . any)]))
