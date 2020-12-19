@@ -9,14 +9,18 @@
     [(debug-define name:id exp)
      #'(begin
          (define name exp)
-         (env/bind name exp))]
+         (env/bind (syntax-e #'name) exp))]
     [(debug-define (name:id param*:id ...) body)
      #'(define (name param* ...)
-         (displayln 'debug)
-         body)]
+         (parameterize ([cur-env (make-env)])
+           (for ([p-name (list #'param* ...)]
+                 [p (list param* ...)])
+             (env/bind (syntax-e p-name) p))
+           (displayln (cur-env))
+           body))]
     [(debug-define . any) #'(define . any)]))
 
 (debug-define foo 1)
 (debug-define (id x) x)
 
-(id 1)
+(id 2)
