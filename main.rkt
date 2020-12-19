@@ -18,6 +18,7 @@
              (env/bind (syntax-e p-name) p))
            (displayln (cur-env))
            body))]
+    ;; since rest form should be invalid, we rebuild define form to get error
     [(debug-define . any) #'(define . any)]))
 
 (debug-define foo 1)
