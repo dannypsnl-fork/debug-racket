@@ -1,17 +1,15 @@
 #lang racket
 
 (require (for-syntax syntax/parse))
-
-(struct env (cur-map parent) #:transparent)
-(define (make-env [parent (cur-env)])
-  (env (make-hash) parent))
-(define cur-env (make-parameter (make-env #f)))
+(require "env.rkt")
 
 (define-syntax (debug-define stx)
   (syntax-parse stx
-    	#:literals (debug-define)
+    #:literals (debug-define)
     [(debug-define name:id exp)
-     #'(define name exp)]
+     #'(begin
+         (define name exp)
+         (env/bind name exp))]
     [(debug-define (name:id param*:id ...) body)
      #'(define (name param* ...)
          (displayln 'debug)
