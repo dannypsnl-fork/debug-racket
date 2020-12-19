@@ -1,7 +1,6 @@
 #lang racket
 
-(require (for-syntax syntax/parse)
-         racket/trace)
+(require (for-syntax syntax/parse))
 (require "env.rkt")
 
 (define (prompt)
@@ -11,7 +10,7 @@
     ['env (displayln (cur-env))]
     [else (printf "unknown command: `~a`~n" e)]))
 
-(trace-define-syntax (debug-define stx)
+(define-syntax (debug-define stx)
   (syntax-parse stx
     #:literals (debug-define)
     [(debug-define name:id exp)
