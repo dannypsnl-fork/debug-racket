@@ -21,13 +21,15 @@
          (define name exp)
          (env/bind (syntax-e #'name) exp))]
     [(debug-define (name:id param*:id ...) e* ... e)
-     #'(define (name param* ...)
-         (parameterize ([cur-env (make-env)])
-           (for ([p-name (list #'param* ...)]
-                 [p (list param* ...)])
-             (env/bind (syntax-e p-name) p))
-           (~@ (prompt) e*) ...
-           (prompt) e))]
+     #'(begin
+         (define (name param* ...)
+           (parameterize ([cur-env (make-env)])
+             (for ([p-name (list #'param* ...)]
+                   [p (list param* ...)])
+               (env/bind (syntax-e p-name) p))
+             (~@ (prompt) e*) ...
+             (prompt) e))
+         (env/bind (syntax-e #'name) '<function>))]
     ;; since rest form should be invalid, we rebuild define form to get error
     [(debug-define . any) #'(define . any)]))
 
