@@ -1,4 +1,4 @@
-#lang racket
+#lang racket/base
 
 (provide make-env cur-env
          env/bind env/lookup)
