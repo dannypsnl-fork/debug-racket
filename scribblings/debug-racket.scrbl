@@ -1,5 +1,6 @@
 #lang scribble/manual
-@require[@for-label[debug-racket]]
+@require[@for-label[(except-in debug-racket let define)
+                    (except-in racket/base let define)]]
 
 @title{debug-racket}
 @author{Lîm Tsú-thuàn}
