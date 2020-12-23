@@ -1,5 +1,10 @@
 #lang racket
 
+(provide (except-out (all-from-out racket)
+                     define let)
+         (rename-out [debug-define define]
+                     [debug-let let]))
+
 (require (for-syntax syntax/parse))
 (require "env.rkt")
 
@@ -51,11 +56,5 @@
            (prompt) e))]
     [(debug-let . any) #'(let . any)]))
 
-(debug-define foo 1)
-(debug-define (id x) x)
-
-(id 2)
-
-(debug-let ([a 1] [b 2])
-           (displayln b)
-           a)
+(module reader syntax/module-reader
+  debug-racket)
