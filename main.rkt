@@ -62,7 +62,7 @@
                (env/bind (syntax-e b-name) b-e))
              new-body)))]
     ;; name-let was ignored, thus, we throw exception directly
-    [(debug-let . any) (error 'debug-let "~a" stx)]))
+    [(debug-let . any) (error 'let "~a" stx)]))
 
 (module reader syntax/module-reader
   debug-racket)
