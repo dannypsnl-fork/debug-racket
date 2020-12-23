@@ -7,11 +7,16 @@
   (display "> ")
   (define e (read))
   (match e
-    ['env (displayln (cur-env))
-          (prompt)]
+    ['env
+     (displayln (cur-env))
+     (prompt)]
     ['c (void)]
-    [else (printf "unknown command: `~a`~n" e)
-          (prompt)]))
+    [`(eval ,e)
+     (displayln (eval e (cur-ns)))
+     (prompt)]
+    [else
+     (printf "unknown command: `~a`~n" e)
+     (prompt)]))
 
 (define-syntax (debug-define stx)
   (syntax-parse stx
@@ -52,5 +57,5 @@
 (id 2)
 
 (debug-let ([a 1] [b 2])
-  (displayln b)
-  a)
+           (displayln b)
+           a)
