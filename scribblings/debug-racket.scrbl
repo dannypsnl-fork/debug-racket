@@ -1,6 +1,5 @@
 #lang scribble/manual
-@require[@for-label[debug-racket
-                    racket/base]]
+@require[@for-label[debug-racket]]
 
 @title{debug-racket}
 @author{Lîm Tsú-thuàn}
